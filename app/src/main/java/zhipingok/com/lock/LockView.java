@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -18,16 +19,24 @@ public class LockView extends View  {
     LockPoint[][] points=new LockPoint[3][3];
     LockLine line =new LockLine();
 
+
+    private float feelDis ,padding;
+
+
+
     public LockView(Context context) {
         super(context);
     }
 
     public LockView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public LockView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+
+       super(context, attrs, defStyleAttr);
+       feelDis = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,30,context.getResources().getDisplayMetrics());
+       padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,100,context.getResources().getDisplayMetrics());
         //this.
     }
 
@@ -36,10 +45,10 @@ public class LockView extends View  {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         int width = Math.min(getMeasuredWidth(),getMeasuredHeight());
-        int stepWidth=(width-20)/2;
+        int stepWidth=(width-(int)padding*2)/2;
         for(int i=0;i<3;i++){
             for (int j=0;j<3;j++){
-                points[i][j]=new LockPoint(10,i*stepWidth+10,j*stepWidth+10);
+                points[i][j]=new LockPoint(10,i*stepWidth+padding,j*stepWidth+padding);
                 points[i][j].setId(i<<4|j);
             }
         }
@@ -57,7 +66,6 @@ public class LockView extends View  {
         paint.setDither(true);
         paint.setStyle(Paint.Style.FILL);
         paint.setAlpha(50);
-
         //绘点
         for(int i=0;i<3;i++){
             for(int j=0;j<3;j++){
@@ -80,10 +88,10 @@ public class LockView extends View  {
                 line.clear();
                 break;
             case MotionEvent.ACTION_UP:
-
+                line.setM(0,0);
                 break;
             case MotionEvent.ACTION_MOVE:
-                line.setM(x,y);
+                line.setM(x, y);
                 break;
         }
 
@@ -92,9 +100,11 @@ public class LockView extends View  {
         for (int i=0;i<3;i++){
             for(int j=0;j<3;j++){
                 mPoint=points[i][j];
-                if( mPoint.dis(x,y)<40){
-                    if(!line.hasPoint(mPoint))
+                if( mPoint.dis(x,y)<feelDis){
+                    if(!line.hasPoint(mPoint)) {
+                        mPoint.setState(1);
                         line.addPoint(mPoint);
+                    }
                 }
             }
         }
@@ -103,5 +113,9 @@ public class LockView extends View  {
 
 
         return true;
+    }
+
+    public static interface OnCompeleteListener{
+        void complete(int[] codes);
     }
 }

@@ -1,6 +1,7 @@
 package zhipingok.com.lock;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.Log;
@@ -26,6 +27,9 @@ public class LockLine {
     public void clear(){
         mx=0;
         my=0;
+        for(int i=0;i<list.size();i++){
+            list.get(i).setState(0);
+        }
         list.clear();
     }
 
@@ -36,9 +40,14 @@ public class LockLine {
 
     public boolean hasPoint(LockPoint point){
         for(int i=list.size()-1;i>=0;i--){
+
             if(list.get(i).getId()==point.getId())return true;
         }
         return  false;
+    }
+
+    public List<LockPoint> getPoints(){
+        return list;
     }
 
 
@@ -46,10 +55,11 @@ public class LockLine {
         int pointSize=list.size();
         if(pointSize == 0) return;
 
+        paint.setColor(Color.CYAN);
         LockPoint starPoint=list.get(0)
                 ,endPoint;
         for(int i=1;i<pointSize;i++){
-           endPoint=list.get(i);
+            endPoint=list.get(i);
             canvas.drawLine(starPoint.getX(),starPoint.getY(),endPoint.getX(),endPoint.getY(),paint);
             starPoint=endPoint;
         }

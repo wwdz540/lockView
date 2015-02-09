@@ -15,6 +15,8 @@ public class LockPoint {
 
     private int id;
 
+    private int state=0;
+
     public LockPoint(float radio, float x, float y) {
         this.radio = radio;
         this.x = x;
@@ -50,8 +52,21 @@ public class LockPoint {
 
     public void setId(int id) { this.id = id;  }
 
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
     public void draw(Canvas canvas, Paint paint) {
-        paint.setColor(Color.RED);
+       int color = Color.GRAY;
+       switch (state){
+           case 1:
+               color=Color.GREEN;
+       }
+        paint.setColor(color);
         canvas.drawCircle(x, y, radio, paint);
     }
 
