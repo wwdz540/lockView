@@ -2,14 +2,13 @@ package zhipingok.com.lock;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.List;
 
 /**
  * Created by cheshire_cat on 15/2/5.
@@ -18,7 +17,7 @@ public class LockView extends View  {
 
     LockPoint[][] points=new LockPoint[3][3];
     LockLine line =new LockLine();
-
+    private OnCompeleteListener  compeleteListener;
 
     private float feelDis ,padding;
 
@@ -89,6 +88,17 @@ public class LockView extends View  {
                 break;
             case MotionEvent.ACTION_UP:
                 line.setM(0,0);
+
+                if(compeleteListener!=null){
+                    List<LockPoint> pts = line.getPoints();
+                    int ptsSzie=pts.size();
+                    int[] ids=new int[ptsSzie];
+                    for(int i=0;i<ptsSzie;i++){
+                        ids[i]=pts.get(i).getId();
+                    }
+
+                    compeleteListener.complete(ids);
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
                 line.setM(x, y);
@@ -109,9 +119,6 @@ public class LockView extends View  {
             }
         }
         invalidate();
-       // Log.d("wzp","x:"+x+"  y:"+y);
-
-
         return true;
     }
 
