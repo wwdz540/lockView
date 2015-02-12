@@ -8,7 +8,7 @@
         <zhipingok.com.lock.LockView
             android:layout_marginTop="30dp"
             android:layout_width="match_parent" android:layout_height="match_parent"
-            android:id="@+id/vd"
+            android:id="@+id/lock_view"
             android:layout_gravity="center_horizontal"
             android:padding="10dip" />
 

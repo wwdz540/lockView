@@ -36,7 +36,10 @@ public class LockView extends View  {
        super(context, attrs, defStyleAttr);
        feelDis = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,30,context.getResources().getDisplayMetrics());
        padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,100,context.getResources().getDisplayMetrics());
-        //this.
+    }
+
+    public void setOnCompeleteListener(OnCompeleteListener listener){
+        this.compeleteListener=listener;
     }
 
     @Override

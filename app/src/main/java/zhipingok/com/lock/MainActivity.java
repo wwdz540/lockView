@@ -2,38 +2,31 @@ package zhipingok.com.lock;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import static zhipingok.com.lock.LockView.OnCompeleteListener;
 
-public class MainActivity extends ActionBarActivity {
 
+public class MainActivity extends ActionBarActivity implements OnCompeleteListener {
+
+    private LockView lockView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        lockView = (LockView) findViewById(R.id.lock_view);
+        lockView.setOnCompeleteListener(this);
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    public void complete(int[] codes) {
+        for(int i=0;i<codes.length;i++){
+            Log.d("wzp",codes[i]+"");
         }
-
-        return super.onOptionsItemSelected(item);
+       // Log.d("wzp",)
     }
 }
