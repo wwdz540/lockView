@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,10 +18,10 @@ public class LockView extends View  {
 
     LockPoint[][] points=new LockPoint[3][3];
     LockLine line =new LockLine();
-    private OnCompeleteListener  compeleteListener;
+    private OnCompeleteListener  compeleteListener=null;
 
     private float feelDis ,padding;
-
+    private int preX=-1,preY=-1;
 
 
     public LockView(Context context) {
@@ -108,22 +109,52 @@ public class LockView extends View  {
                 break;
         }
 
+        addPoint(x,y);
+        invalidate();
+        return true;
+    }
 
+    private void addPoint(float x,float y){
         LockPoint mPoint;
         for (int i=0;i<3;i++){
             for(int j=0;j<3;j++){
                 mPoint=points[i][j];
                 if( mPoint.dis(x,y)<feelDis){
                     if(!line.hasPoint(mPoint)) {
+                        if(preX!=-1 && preY!=-1){
+                            addOnLinePoint(preX,preY,i,j);
+                        }
+                        preX=i;
+                        preY=j;
                         mPoint.setState(1);
                         line.addPoint(mPoint);
                     }
                 }
             }
         }
-        invalidate();
-        return true;
     }
+
+    //将同一线的点加入线中
+   private void addOnLinePoint(int startX,int startY,int endX,int endY){
+            int mStartX=Math.min(startX,endX),
+                mStartY=Math.min(startY,endY),
+                mEndX=Math.max(startX,endX),
+                mEndY=Math.max(startY,endY);
+
+       double slope= Math.atan2 ((mEndY-mStartY),(float)(mEndX-mStartX));
+       Log.d("wzp","slope="+slope);
+       LockPoint mPoint;
+       for(int i=mStartX;i<mStartX;i++){
+           for(int j=mStartY;j<mEndY;j++){
+              if(slope ==  Math.atan2((j - mStartY),(float)(i - mStartX))){
+                  mPoint=points[i][j];
+                  mPoint.setState(1);
+                  line.addPoint(mPoint);
+              }
+           }
+       }
+    }
+
 
     public static interface OnCompeleteListener{
         void complete(int[] codes);

@@ -20,14 +20,13 @@ public class LockLine {
    private  float my;
 
    public void addPoint(LockPoint point){
-
        list.add(point);
     }
 
     public void clear(){
         mx=0;
         my=0;
-        for(int i=0;i<list.size();i++){
+        for(int i = 0;i<list.size();i++){
             list.get(i).setState(0);
         }
         list.clear();
