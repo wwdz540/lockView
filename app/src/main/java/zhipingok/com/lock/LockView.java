@@ -141,7 +141,7 @@ public class LockView extends View  {
                dy=startY-endY;
 
 
-       float n=(dy==0)?0:dx/(dy);
+       float n=(dy==0)?-1:dx/(dy);
        float jj=startX-n*startY;
 
 
@@ -158,7 +158,7 @@ public class LockView extends View  {
 
             float x=n*y+jj;
            Log.d("yy","x="+x);
-            if(x >= mStartX && x<=mEndX){
+            if((x >= mStartX && x<=mEndX)||n==-1){
                 mPoint=points[(int)x][y];
                 mPoint.setState(1);
                 line.addPoint(mPoint);
