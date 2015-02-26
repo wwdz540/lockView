@@ -136,22 +136,33 @@ public class LockView extends View  {
 
     //将同一线的点加入线中
    private void addOnLinePoint(int startX,int startY,int endX,int endY){
-            int mStartX=Math.min(startX,endX),
+
+       float dx=startX-endX,
+               dy=startY-endY;
+
+
+       float n=(dy==0)?0:dx/(dy);
+       float jj=startX-n*startY;
+
+
+       Log.d("ex:","x="+n+"y+"+jj);
+           int mStartX=Math.min(startX,endX),
                 mStartY=Math.min(startY,endY),
                 mEndX=Math.max(startX,endX),
                 mEndY=Math.max(startY,endY);
 
-       double slope= Math.atan2 ((mEndY-mStartY),(float)(mEndX-mStartX));
-       Log.d("wzp","slope="+slope);
+       Log.d("yy","startY="+startY+", endY="+endY);
        LockPoint mPoint;
-       for(int i=mStartX;i<mStartX;i++){
-           for(int j=mStartY;j<mEndY;j++){
-              if(slope ==  Math.atan2((j - mStartY),(float)(i - mStartX))){
-                  mPoint=points[i][j];
-                  mPoint.setState(1);
-                  line.addPoint(mPoint);
-              }
-           }
+       for(int y=mStartY;y<=mEndY;y++){
+
+
+            float x=n*y+jj;
+           Log.d("yy","x="+x);
+            if(x >= mStartX && x<=mEndX){
+                mPoint=points[(int)x][y];
+                mPoint.setState(1);
+                line.addPoint(mPoint);
+            }
        }
     }
 
